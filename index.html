@@ -1,0 +1,3116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD CrimeTrack - Bangladesh Criminal Intelligence System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-red: #ff0040;
+            --neon-green: #00ff88;
+            --neon-yellow: #ffee00;
+            --neon-purple: #b400ff;
+            --neon-orange: #ff6600;
+            --dark-bg: #0a0a0f;
+            --dark-card: #0d0d1a;
+            --dark-panel: #111128;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0, 240, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 0, 64, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(0, 255, 136, 0.02) 0%, transparent 50%);
+            z-index: -2;
+            animation: bgPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Grid Lines Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(50px);
+            }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: float linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Scan Line Effect */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            opacity: 0.1;
+            z-index: 1000;
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                top: -3px;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            animation: logoSpin 10s linear infinite;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 240, 255, 0.15);
+            animation: logoSpin 15s linear infinite reverse;
+        }
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+            }
+        }
+
+        @keyframes logoSpin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--neon-cyan);
+        }
+
+        .logo-text h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-cyan), #00a8ff, var(--neon-green));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            letter-spacing: 3px;
+        }
+
+        .logo-text p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(0, 240, 255, 0.5);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--neon-green);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: statusBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes statusBlink {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 5px var(--neon-green);
+            }
+
+            50% {
+                opacity: 0.3;
+                box-shadow: none;
+            }
+        }
+
+        .bd-flag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 12px;
+            border: 1px solid rgba(0, 100, 0, 0.3);
+            border-radius: 4px;
+            background: rgba(0, 100, 0, 0.05);
+        }
+
+        .flag-circle {
+            width: 20px;
+            height: 20px;
+            background: #006a4e;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .flag-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: #f42a41;
+            border-radius: 50%;
+        }
+
+        .bd-flag span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: #006a4e;
+        }
+
+        .datetime {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(0, 240, 255, 0.6);
+            text-align: right;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        /* System Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 180px;
+            background: var(--dark-panel);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+        }
+
+        .stat-card:nth-child(1)::before {
+            background: var(--neon-cyan);
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: var(--neon-red);
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: var(--neon-green);
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: var(--neon-yellow);
+        }
+
+        .stat-card:nth-child(5)::before {
+            background: var(--neon-purple);
+        }
+
+        .stat-card:nth-child(6)::before {
+            background: var(--neon-orange);
+        }
+
+        .stat-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .stat-card:nth-child(1) .stat-value {
+            color: var(--neon-cyan);
+        }
+
+        .stat-card:nth-child(2) .stat-value {
+            color: var(--neon-red);
+        }
+
+        .stat-card:nth-child(3) .stat-value {
+            color: var(--neon-green);
+        }
+
+        .stat-card:nth-child(4) .stat-value {
+            color: var(--neon-yellow);
+        }
+
+        .stat-card:nth-child(5) .stat-value {
+            color: var(--neon-purple);
+        }
+
+        .stat-card:nth-child(6) .stat-value {
+            color: var(--neon-orange);
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 40px;
+        }
+
+        .search-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-title::before,
+        .search-title::after {
+            content: '';
+            height: 1px;
+            flex: 1;
+            background: linear-gradient(90deg, var(--neon-cyan), transparent);
+        }
+
+        .search-title::after {
+            background: linear-gradient(90deg, transparent, var(--neon-cyan));
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            align-items: stretch;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 25px 18px 55px;
+            background: var(--dark-panel);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .search-input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1), inset 0 0 30px rgba(0, 240, 255, 0.02);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(0, 240, 255, 0.4);
+            font-size: 1.2rem;
+        }
+
+        .filter-select {
+            padding: 18px 20px;
+            background: var(--dark-panel);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            border-color: var(--neon-cyan);
+        }
+
+        .filter-select option {
+            background: var(--dark-bg);
+            color: #fff;
+        }
+
+        .search-btn {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 240, 255, 0.05));
+            border: 1px solid var(--neon-cyan);
+            border-radius: 8px;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .search-btn:hover::before {
+            left: 100%;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(0, 240, 255, 0.1));
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Results Section */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-count {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(0, 240, 255, 0.5);
+        }
+
+        .results-count span {
+            color: var(--neon-cyan);
+            font-weight: bold;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        /* Criminal Card */
+        .criminal-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(0, 240, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .criminal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-red));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .criminal-card:hover::before {
+            opacity: 1;
+        }
+
+        .criminal-card:hover {
+            border-color: rgba(0, 240, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 240, 255, 0.05);
+        }
+
+        .card-content {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .card-avatar {
+            width: 90px;
+            height: 110px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .card-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.3) contrast(1.1);
+            transition: filter 0.3s;
+        }
+
+        .criminal-card:hover .card-avatar img {
+            filter: saturate(0.5) contrast(1.2);
+        }
+
+        .card-avatar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(0, 240, 255, 0.1));
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .card-id {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(0, 240, 255, 0.4);
+            margin-bottom: 10px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            padding: 2px 10px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tag-danger {
+            background: rgba(255, 0, 64, 0.1);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 0, 64, 0.2);
+        }
+
+        .tag-warning {
+            background: rgba(255, 238, 0, 0.1);
+            color: var(--neon-yellow);
+            border: 1px solid rgba(255, 238, 0, 0.2);
+        }
+
+        .tag-info {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .tag-active {
+            background: rgba(255, 0, 64, 0.15);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            animation: tagPulse 2s ease-in-out infinite;
+        }
+
+        .tag-captured {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .tag-wanted {
+            background: rgba(255, 102, 0, 0.1);
+            color: var(--neon-orange);
+            border: 1px solid rgba(255, 102, 0, 0.2);
+        }
+
+        @keyframes tagPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.35);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-footer {
+            padding: 12px 20px;
+            border-top: 1px solid rgba(0, 240, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .threat-level {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+        }
+
+        .threat-high {
+            color: var(--neon-red);
+        }
+
+        .threat-medium {
+            color: var(--neon-yellow);
+        }
+
+        .threat-low {
+            color: var(--neon-green);
+        }
+
+        .threat-critical {
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .view-btn {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .view-btn:hover {
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Modal / Detail Panel */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            width: 90%;
+            max-width: 1100px;
+            max-height: 90vh;
+            background: var(--dark-card);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 16px;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal::-webkit-scrollbar-thumb {
+            background: rgba(0, 240, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(0, 240, 255, 0.03), transparent);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            background: rgba(255, 0, 64, 0.05);
+            color: var(--neon-red);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 0, 64, 0.15);
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .detail-top {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .detail-photo-section {
+            flex-shrink: 0;
+        }
+
+        .detail-photo {
+            width: 220px;
+            height: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 240, 255, 0.15);
+            position: relative;
+        }
+
+        .detail-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.4) contrast(1.1);
+        }
+
+        .detail-photo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, transparent 70%, rgba(0, 0, 0, 0.5)),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.01) 2px, rgba(0, 240, 255, 0.01) 4px);
+            z-index: 1;
+        }
+
+        .fingerprint-section {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--dark-panel);
+            border: 1px solid rgba(0, 240, 255, 0.08);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .fingerprint-section .label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(0, 240, 255, 0.4);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .fingerprint-visual {
+            font-size: 2.5rem;
+            opacity: 0.3;
+        }
+
+        .detail-info-section {
+            flex: 1;
+        }
+
+        .criminal-name-large {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .criminal-alias {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: rgba(0, 240, 255, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .criminal-case-id {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.25);
+            margin-bottom: 15px;
+        }
+
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .detail-tags .tag {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .info-item {
+            padding: 12px 15px;
+            background: var(--dark-panel);
+            border: 1px solid rgba(0, 240, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .info-item .label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(0, 240, 255, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .info-item .value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        /* Detail Sections */
+        .detail-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--dark-panel);
+            border: 1px solid rgba(0, 240, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .detail-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-section-title::before {
+            content: '▸';
+            color: var(--neon-cyan);
+        }
+
+        .bio-text {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .criminal-record-list {
+            list-style: none;
+        }
+
+        .criminal-record-list li {
+            padding: 12px 15px;
+            border-left: 2px solid var(--neon-red);
+            margin-bottom: 10px;
+            background: rgba(255, 0, 64, 0.02);
+            border-radius: 0 6px 6px 0;
+        }
+
+        .record-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(0, 240, 255, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .record-desc {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .record-charge {
+            font-size: 0.9rem;
+            color: var(--neon-red);
+            font-weight: 600;
+        }
+
+        .associates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .associate-item {
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.05);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .associate-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: rgba(0, 240, 255, 0.3);
+        }
+
+        .associate-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .associate-relation {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(0, 240, 255, 0.3);
+        }
+
+        /* Threat Level Bar */
+        .threat-bar {
+            margin-top: 20px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 0, 64, 0.1);
+        }
+
+        .threat-bar-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .threat-bar-visual {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .threat-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .threat-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: inherit;
+            filter: blur(4px);
+        }
+
+        .threat-critical-bar {
+            background: linear-gradient(90deg, #ff0000, #ff4444);
+            width: 95%;
+        }
+
+        .threat-high-bar {
+            background: linear-gradient(90deg, #ff0040, #ff6666);
+            width: 80%;
+        }
+
+        .threat-medium-bar {
+            background: linear-gradient(90deg, #ffee00, #ff9900);
+            width: 55%;
+        }
+
+        .threat-low-bar {
+            background: linear-gradient(90deg, #00ff88, #00cc66);
+            width: 30%;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(0, 240, 255, 0.1);
+            border-top: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(0, 240, 255, 0.5);
+            letter-spacing: 3px;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* No Results */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .no-results.active {
+            display: block;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.2;
+        }
+
+        .no-results h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .welcome-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            border: 2px solid rgba(0, 240, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            animation: welcomePulse 3s ease-in-out infinite;
+        }
+
+        .welcome-icon::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border: 1px dashed rgba(0, 240, 255, 0.1);
+            border-radius: 50%;
+            animation: logoSpin 20s linear infinite;
+        }
+
+        @keyframes welcomePulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+            }
+        }
+
+        .welcome-screen h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: rgba(0, 240, 255, 0.5);
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-screen p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .recent-searches {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .recent-tag {
+            padding: 8px 20px;
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 20px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(0, 240, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .recent-tag:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            color: var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.08);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 25px 40px;
+            border-top: 1px solid rgba(0, 240, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.15);
+            letter-spacing: 2px;
+        }
+
+        .footer .warning {
+            color: rgba(255, 0, 64, 0.3);
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-right {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 20px 15px;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .filter-select {
+                min-width: 100%;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-top {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .criminal-name-large {
+                font-size: 1.3rem;
+                text-align: center;
+            }
+
+            .detail-tags {
+                justify-content: center;
+            }
+
+            .modal {
+                width: 98%;
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 15px;
+            }
+
+            .stats-bar {
+                gap: 10px;
+            }
+
+            .stat-card {
+                min-width: 140px;
+            }
+        }
+
+        /* Glitch effect for titles */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        .glitch:hover::before {
+            animation: glitch1 0.3s ease;
+            color: var(--neon-red);
+            opacity: 0.8;
+        }
+
+        .glitch:hover::after {
+            animation: glitch2 0.3s ease;
+            color: var(--neon-cyan);
+            opacity: 0.8;
+        }
+
+        @keyframes glitch1 {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+            }
+
+            40% {
+                transform: translate(2px, -2px);
+            }
+
+            60% {
+                transform: translate(-1px, 1px);
+            }
+
+            80% {
+                transform: translate(1px, -1px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        @keyframes glitch2 {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(2px, -2px);
+            }
+
+            40% {
+                transform: translate(-2px, 2px);
+            }
+
+            60% {
+                transform: translate(1px, -1px);
+            }
+
+            80% {
+                transform: translate(-1px, 1px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-bg"></div>
+    <div class="scanline"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                </svg>
+            </div>
+            <div class="logo-text">
+                <h1>BD CRIMETRAK</h1>
+                <p>Bangladesh Criminal Intelligence Network</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>SYSTEM ONLINE</span>
+            </div>
+            <div class="bd-flag">
+                <div class="flag-circle"></div>
+                <span>GOV.BD</span>
+            </div>
+            <div class="datetime" id="datetime"></div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main-container">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label">Total Records</div>
+                <div class="stat-value" id="totalRecords">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Most Wanted</div>
+                <div class="stat-value" id="mostWanted">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Captured</div>
+                <div class="stat-value" id="captured">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Cases</div>
+                <div class="stat-value" id="activeCases">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Divisions Covered</div>
+                <div class="stat-value">8</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Last Updated</div>
+                <div class="stat-value" style="font-size:0.8rem;" id="lastUpdated">--</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-title">◆ Criminal Database Search ◆</div>
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">⌕</span>
+                    <input type="text" class="search-input" id="searchInput"
+                        placeholder="Enter criminal name, alias, or case ID..." autocomplete="off">
+                </div>
+                <select class="filter-select" id="filterSelect">
+                    <option value="all">All Categories</option>
+                    <option value="murder">Murder</option>
+                    <option value="drug trafficking">Drug Trafficking</option>
+                    <option value="robbery">Robbery</option>
+                    <option value="terrorism">Terrorism</option>
+                    <option value="fraud">Fraud</option>
+                    <option value="kidnapping">Kidnapping</option>
+                    <option value="cybercrime">Cybercrime</option>
+                    <option value="extortion">Extortion</option>
+                    <option value="human trafficking">Human Trafficking</option>
+                    <option value="arms dealing">Arms Dealing</option>
+                </select>
+                <button class="search-btn" id="searchBtn">SEARCH</button>
+            </div>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-icon">🔍</div>
+            <h2 class="glitch" data-text="INITIATE SEARCH">INITIATE SEARCH</h2>
+            <p>Access Bangladesh's most comprehensive criminal intelligence database. Search by name, alias, or case ID
+                to retrieve classified criminal records.</p>
+            <div class="recent-searches">
+                <span class="recent-tag" onclick="quickSearch('Karim')">Karim</span>
+                <span class="recent-tag" onclick="quickSearch('Rahim')">Rahim</span>
+                <span class="recent-tag" onclick="quickSearch('Drug')">Drug Trafficking</span>
+                <span class="recent-tag" onclick="quickSearch('Murder')">Murder</span>
+                <span class="recent-tag" onclick="quickSearch('Dhaka')">Dhaka</span>
+                <span class="recent-tag" onclick="quickSearch('Chittagong')">Chittagong</span>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">SCANNING DATABASE...</div>
+        </div>
+
+        <!-- No Results -->
+        <div class="no-results" id="noResults">
+            <div class="no-results-icon">⚠</div>
+            <h3>NO RECORDS FOUND</h3>
+            <p>No criminal records match your search criteria. Try different keywords.</p>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsSection" style="display:none;">
+            <div class="results-header">
+                <div class="results-count">RECORDS FOUND: <span id="resultsCount">0</span></div>
+            </div>
+            <div class="results-grid" id="resultsGrid"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>BD CRIMETRAK v4.7.2 — BANGLADESH POLICE CRIMINAL INTELLIGENCE DIVISION</p>
+            <p class="warning">⚠ CLASSIFIED — AUTHORIZED PERSONNEL ONLY — UNAUTHORIZED ACCESS IS PUNISHABLE UNDER ICT
+                ACT 2006</p>
+        </div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>▣ Criminal Dossier</h2>
+                <button class="close-btn" id="closeModal">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======================== CRIMINAL DATABASE ========================
+        const criminals = [
+            {
+                id: "BD-CRM-2024-0031",
+                name: "Suraiya Meem",
+                alias: "Daring Sis",
+                photo: "https://scontent.cdninstagram.com/v/t51.82787-19/671147489_17908249743390995_4230953880075984149_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=104&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=jJM1FEzFf00Q7kNvwGWmuhA&_nc_oc=Adq7bt_UkFYnfJ2RX0vr5wa9BUh7O7V9DZF27tHZFjOjI-ZrlS_L8Fn8t6KvPuaQJ0w&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=JynDXC1Le0PMuRM-sz0Fkg&_nc_ss=7baaf&oh=00_Af3AqzC1LKXlXokZdfUuDODIEwDXmRPpxuWOn0z4Gce84Q&oe=69F4879C",
+                age: 19,
+                gender: "Female",
+                bloodGroup: "O-",
+                nationality: "Bangladeshi",
+                nid: "1998XXXXXXX031",
+                division: "Chittagong",
+                district: "Chittagong",
+                lastKnownLocation: "New Market, Chittagong",
+                height: "5'5\"",
+                weight: "56 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Dagger tattoo on neck, mole on right wrist, extremely gorgeous",
+                crimeType: "Murder",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳12,00,000",
+                bio: "Suraiya Meem, known as 'Daring Sis', is a calculated syndicate leader operating in the port city of Chittagong. She is suspected of orchestrating multiple high-profile assassinations and controlling an underground mafia network. Meem is known for her extreme tactical intelligence and her ability to remain invisible from law enforcement for years. She is considered highly volatile and should be approached with extreme caution.",
+                criminalRecords: [
+                    { date: "2021-11-05", charge: "Homicide (Serial)", desc: "Suspected in three consecutive murders in Patenga area" },
+                    { date: "2022-04-12", charge: "Organized Crime / Mafia Operations", desc: "Controlling illegal port smuggling routes" },
+                    { date: "2023-09-28", charge: "Contract Killing", desc: "Assassination of a local business tycoon" },
+                    { date: "2024-02-15", charge: "Arms Possession & Terrorism", desc: "Illegal arms stockpile discovered in private residence" }
+                ],
+                associates: [
+                    { name: "Unknown Syndicate", relation: "Underworld Network" },
+                    { name: "Sumaiya Akter", relation: "Main Enforcer" },
+                    { name: "Angel Sadia", relation: "Logistics Specialist" }
+                ],
+                tags: ["mafia", "serial killer", "most wanted", "chittagong underworld"],
+                warrants: 9
+            },
+            {
+                id: "BD-CRM-2024-0001",
+                name: "Md. Karim Hossain",
+                alias: "Kala Karim",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=karim&backgroundColor=1a1a2e",
+                age: 42,
+                gender: "Male",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1990XXXXXXX001",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Kamrangirchar, Dhaka",
+                height: "5'9\"",
+                weight: "78 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Scar on left cheek, tattoo of snake on right arm",
+                crimeType: "Murder",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳5,00,000",
+                bio: "Md. Karim Hossain, widely known as 'Kala Karim', is one of the most notorious criminals operating in the Dhaka metropolitan area. He is the suspected leader of a violent gang responsible for at least 12 contract killings between 2018 and 2024. Karim rose through the ranks of organized crime in the Kamrangirchar slum areas and is known for his ruthless methods. He has evaded law enforcement multiple times and is considered extremely dangerous.",
+                criminalRecords: [
+                    { date: "2018-03-15", charge: "Murder (Section 302)", desc: "Contract killing of businessman in Motijheel" },
+                    { date: "2019-07-22", charge: "Attempted Murder", desc: "Attack on rival gang member in Jatrabari" },
+                    { date: "2020-01-10", charge: "Arms Possession (Illegal)", desc: "Recovered with 2 firearms in Keraniganj" },
+                    { date: "2021-09-05", charge: "Murder (Section 302)", desc: "Double homicide in Lalbagh area" },
+                    { date: "2023-04-18", charge: "Murder & Extortion", desc: "Killing of a local trader who refused to pay extortion" },
+                    { date: "2024-01-02", charge: "Murder (Section 302)", desc: "Contract killing near Sadarghat" }
+                ],
+                associates: [
+                    { name: "Jamal Uddin", relation: "Lieutenant" },
+                    { name: "Rezaul Islam", relation: "Arms Supplier" },
+                    { name: "Babul Mia", relation: "Gang Member" },
+                    { name: "Nasir Ahmed", relation: "Informant" }
+                ],
+                tags: ["murder", "organized crime", "gang leader"],
+                warrants: 4
+            },
+            {
+                id: "BD-CRM-2024-0002",
+                name: "Faruk Ahmed Khan",
+                alias: "Faruk Dacoit",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=faruk&backgroundColor=1a1a2e",
+                age: 38,
+                gender: "Male",
+                bloodGroup: "A+",
+                nationality: "Bangladeshi",
+                nid: "1986XXXXXXX002",
+                division: "Chittagong",
+                district: "Chittagong",
+                lastKnownLocation: "Halishahar, Chittagong",
+                height: "5'11\"",
+                weight: "85 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Missing right index finger, burn mark on neck",
+                crimeType: "Robbery",
+                threatLevel: "high",
+                status: "wanted",
+                bounty: "৳3,00,000",
+                bio: "Faruk Ahmed Khan is a career criminal known for orchestrating large-scale armed robberies in the Chittagong port city. His gang specializes in targeting cargo trucks, warehouses, and jewelry stores. He is a former dock worker who turned to crime after losing his job in 2012. Police suspect he has connections with cross-border smuggling networks.",
+                criminalRecords: [
+                    { date: "2015-06-12", charge: "Armed Robbery", desc: "Robbery of gold jewelry store in Agrabad" },
+                    { date: "2017-02-28", charge: "Armed Robbery & Assault", desc: "Highway robbery of cargo truck, driver seriously injured" },
+                    { date: "2019-11-15", charge: "Dacoity (Section 395)", desc: "Group robbery at warehouse in port area" },
+                    { date: "2021-08-03", charge: "Armed Robbery", desc: "Bank robbery attempt in Pahartali" },
+                    { date: "2023-05-20", charge: "Dacoity with Murder", desc: "Robbery turned fatal at Hathazari road" }
+                ],
+                associates: [
+                    { name: "Selim Reza", relation: "Partner" },
+                    { name: "Monir Hasan", relation: "Driver" },
+                    { name: "Kabir Sheikh", relation: "Fence" }
+                ],
+                tags: ["robbery", "armed", "dacoity"],
+                warrants: 3
+            },
+            {
+                id: "BD-CRM-2024-0003",
+                name: "Nasreen Begum",
+                alias: "Rani",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=nasreen&backgroundColor=1a1a2e",
+                age: 35,
+                gender: "Female",
+                bloodGroup: "O+",
+                nationality: "Bangladeshi",
+                nid: "1989XXXXXXX003",
+                division: "Rajshahi",
+                district: "Rajshahi",
+                lastKnownLocation: "Boalia, Rajshahi",
+                height: "5'4\"",
+                weight: "60 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Mole below left eye, gold tooth",
+                crimeType: "Human Trafficking",
+                threatLevel: "high",
+                status: "wanted",
+                bounty: "৳4,00,000",
+                bio: "Nasreen Begum, known as 'Rani', operates one of the largest human trafficking rings in the Rajshahi-Chapainawabganj border region. She is suspected of trafficking over 200 women and children to Middle Eastern countries between 2016 and 2023. She uses a network of fake employment agencies and marriage brokers. She is cunning, multilingual, and has multiple false identities.",
+                criminalRecords: [
+                    { date: "2016-09-20", charge: "Human Trafficking", desc: "Trafficking of 15 women to Saudi Arabia via India" },
+                    { date: "2018-04-11", charge: "Human Trafficking & Fraud", desc: "Fake employment scam, 30 victims" },
+                    { date: "2020-07-30", charge: "Human Trafficking", desc: "Trafficking minors across India-Bangladesh border" },
+                    { date: "2022-01-14", charge: "Money Laundering", desc: "Laundering trafficking proceeds through hawala" },
+                    { date: "2023-10-05", charge: "Human Trafficking & Kidnapping", desc: "Kidnapping and trafficking of 8 girls from Chapainawabganj" }
+                ],
+                associates: [
+                    { name: "Abdul Latif", relation: "Border Agent" },
+                    { name: "Kamrunnahar", relation: "Recruiter" },
+                    { name: "Sajid Hussain", relation: "Document Forger" },
+                    { name: "Deepak (India)", relation: "Cross-border Contact" }
+                ],
+                tags: ["human trafficking", "kidnapping", "fraud"],
+                warrants: 5
+            },
+            {
+                id: "BD-CRM-2024-0004",
+                name: "Md. Rahim Uddin",
+                alias: "Rahim Bhai",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=rahim&backgroundColor=1a1a2e",
+                age: 50,
+                gender: "Male",
+                bloodGroup: "AB+",
+                nationality: "Bangladeshi",
+                nid: "1974XXXXXXX004",
+                division: "Dhaka",
+                district: "Narayanganj",
+                lastKnownLocation: "Siddhirganj, Narayanganj",
+                height: "5'7\"",
+                weight: "90 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Prosthetic left leg, heavy beard",
+                crimeType: "Drug Trafficking",
+                threatLevel: "critical",
+                status: "active",
+                bounty: "৳10,00,000",
+                bio: "Md. Rahim Uddin is considered the kingpin of the largest Yaba trafficking network operating in the Dhaka-Narayanganj corridor. Known as 'Rahim Bhai' in the underworld, he controls a vast network that smuggles millions of Yaba tablets from Myanmar through the Cox's Bazar route. He has significant political connections and has evaded arrest through corruption. His network spans across 5 divisions of Bangladesh.",
+                criminalRecords: [
+                    { date: "2012-03-25", charge: "Drug Trafficking (Narcotics Act)", desc: "Seized with 50,000 Yaba tablets in Narayanganj" },
+                    { date: "2014-08-19", charge: "Drug Trafficking", desc: "Major bust: 5 lakh Yaba tablets recovered from warehouse" },
+                    { date: "2016-11-02", charge: "Drug Trafficking & Murder", desc: "Rival dealer killed; drugs worth 10 crore seized" },
+                    { date: "2018-05-14", charge: "Drug Trafficking", desc: "International trafficking network exposed" },
+                    { date: "2020-09-30", charge: "Drug Trafficking & Money Laundering", desc: "Properties worth 50 crore identified" },
+                    { date: "2022-12-08", charge: "Drug Trafficking", desc: "20 lakh Yaba tablets seized from Cox's Bazar connection" },
+                    { date: "2024-02-15", charge: "Drug Trafficking (Ongoing)", desc: "Currently operating from unknown location" }
+                ],
+                associates: [
+                    { name: "Shafiq Alam", relation: "Distribution Chief" },
+                    { name: "Rohingya Contacts", relation: "Myanmar Suppliers" },
+                    { name: "Bashir Ahmed", relation: "Money Laundering" },
+                    { name: "Liton Das", relation: "Transport" },
+                    { name: "Aziz Khan", relation: "Corrupt Officials Contact" }
+                ],
+                tags: ["drug trafficking", "yaba", "organized crime", "money laundering"],
+                warrants: 7
+            },
+            {
+                id: "BD-CRM-2024-0005",
+                name: "Shamsul Haque",
+                alias: "Tiger Shamsu",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=shamsu&backgroundColor=1a1a2e",
+                age: 45,
+                gender: "Male",
+                bloodGroup: "B-",
+                nationality: "Bangladeshi",
+                nid: "1979XXXXXXX005",
+                division: "Khulna",
+                district: "Khulna",
+                lastKnownLocation: "Khalishpur, Khulna",
+                height: "6'0\"",
+                weight: "82 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Tiger tattoo on chest, scar across right eyebrow",
+                crimeType: "Extortion",
+                threatLevel: "high",
+                status: "wanted",
+                bounty: "৳2,50,000",
+                bio: "Shamsul Haque controls a vast extortion network across the Khulna division, targeting businesses, construction projects, and transport operators. Known as 'Tiger Shamsu', he commands a force of over 50 armed men. He rose to power in the Sundarbans region and has connections with pirates operating in the river systems. He is known for extreme violence against those who refuse to pay.",
+                criminalRecords: [
+                    { date: "2013-04-10", charge: "Extortion", desc: "Systematic extortion of Khalishpur industrial area" },
+                    { date: "2015-09-22", charge: "Extortion & Assault", desc: "Brutal assault on factory owner" },
+                    { date: "2017-06-18", charge: "Extortion & Arson", desc: "Set fire to garment factory after extortion refusal" },
+                    { date: "2019-12-05", charge: "Murder & Extortion", desc: "Killed transport business owner" },
+                    { date: "2022-03-15", charge: "Extortion & Arms", desc: "Large-scale extortion with armed threats" }
+                ],
+                associates: [
+                    { name: "Rafiq Sardar", relation: "Second-in-command" },
+                    { name: "Billal Hossain", relation: "Enforcer" },
+                    { name: "Amena Khatun", relation: "Financial Manager" }
+                ],
+                tags: ["extortion", "organized crime", "arson"],
+                warrants: 3
+            },
+            {
+                id: "BD-CRM-2024-0006",
+                name: "Sazzad Hossain",
+                alias: "Jet Sparrow",
+                photo: "https://scontent.fdac198-1.fna.fbcdn.net/v/t39.30808-1/482016982_1153723029682374_4648952609572478245_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=104&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeEhGP2VaEPVfbu2rIqnwYck_L40nMOz8K_8vjScw7PwryiOra_HJaiR7hACMuiUeoj6Pdi6UsfOr7m7O30kpNt3&_nc_ohc=rq53ZLEc_hYQ7kNvwHpTeEW&_nc_oc=AdprxfqP7y9IYyXb41iePC2ZgWaSh0S18Oos1gHnhEWCC-KSAPPipkDKPzrFyQZnqhY&_nc_zt=24&_nc_ht=scontent.fdac198-1.fna&_nc_gid=IzhFVztaXqY8P9lrCeBMiA&_nc_ss=7b2a8&oh=00_Af3NEdcHUAZQScnW0S14vwunj5DggapjmnZA532bpbzQqg&oe=69F473EF",
+                age: 23,
+                gender: "Male",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1997XXXXXXX006",
+                division: "Khulna",
+                district: "Meherpur",
+                lastKnownLocation: "Tongi, Gazipur",
+                height: "5'7\"",
+                weight: "56 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Wears glasses, tech-related tattoos on forearms",
+                crimeType: "Cybercrime",
+                threatLevel: "medium",
+                status: "captured",
+                bounty: "৳1,00,000",
+                bio: "Sazzad Hossain is a highly skilled cybercriminal who ran one of Bangladesh's largest online fraud and hacking operations. He specialized in phishing attacks targeting bank customers, credit card fraud, and ransomware attacks on small businesses. His operations caused estimated losses of over ৳50 crore. He was arrested by RAB's cyber unit in 2024 but is suspected to still have active networks.",
+                criminalRecords: [
+                    { date: "2019-06-15", charge: "Cybercrime (ICT Act Section 66)", desc: "Phishing attack on major bank's online banking" },
+                    { date: "2020-10-30", charge: "Identity Theft & Fraud", desc: "Stole identities of 5000+ bank customers" },
+                    { date: "2021-08-22", charge: "Ransomware Attack", desc: "Attacked 50+ small businesses with ransomware" },
+                    { date: "2022-05-10", charge: "Credit Card Fraud", desc: "International credit card fraud ring" },
+                    { date: "2024-01-20", charge: "Arrested by RAB", desc: "Captured in Tongi, equipment seized" }
+                ],
+                associates: [
+                    { name: "Sakib Rahman", relation: "Co-hacker" },
+                    { name: "Mehedi Hasan", relation: "Money Mule" },
+                    { name: "Unknown (Dark Web)", relation: "International Network" }
+                ],
+                tags: ["cybercrime", "hacking", "fraud", "identity theft"],
+                warrants: 1
+            },
+            {
+                id: "BD-CRM-2024-0007",
+                name: "Abdul Majid Sardar",
+                alias: "Majid Don",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=majid&backgroundColor=1a1a2e",
+                age: 55,
+                gender: "Male",
+                bloodGroup: "O-",
+                nationality: "Bangladeshi",
+                nid: "1969XXXXXXX007",
+                division: "Sylhet",
+                district: "Sylhet",
+                lastKnownLocation: "Moulvibazar, Sylhet",
+                height: "5'6\"",
+                weight: "95 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Partially blind in right eye, walks with a limp",
+                crimeType: "Arms Dealing",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳8,00,000",
+                bio: "Abdul Majid Sardar is the suspected head of one of the largest illegal arms dealing networks in northeastern Bangladesh. He has been operating for over 20 years and supplies weapons to criminal gangs, insurgent groups, and other armed entities. His network spans across the Sylhet, Mymensingh, and Chittagong hill tracts regions. He maintains connections with cross-border arms suppliers in Myanmar and India's northeast.",
+                criminalRecords: [
+                    { date: "2005-02-10", charge: "Illegal Arms Possession", desc: "First arrest with 10 firearms" },
+                    { date: "2010-08-05", charge: "Arms Trafficking", desc: "Intercepted shipment of 50 weapons at border" },
+                    { date: "2014-11-20", charge: "Arms Dealing & Murder", desc: "Killed informant who tipped police" },
+                    { date: "2017-06-30", charge: "Arms Trafficking", desc: "Major arms cache discovered in Moulvibazar tea garden" },
+                    { date: "2020-03-12", charge: "Arms Trafficking", desc: "Cross-border arms smuggling ring exposed" },
+                    { date: "2023-07-25", charge: "Arms Dealing", desc: "Supplied weapons used in multiple murders" }
+                ],
+                associates: [
+                    { name: "Ruhul Amin", relation: "Partner" },
+                    { name: "Manipuri Contacts", relation: "India Supplier" },
+                    { name: "Arakan Group", relation: "Myanmar Connection" },
+                    { name: "Habib Rahman", relation: "Local Distributor" }
+                ],
+                tags: ["arms dealing", "smuggling", "organized crime", "cross-border"],
+                warrants: 6
+            },
+            {
+                id: "BD-CRM-2024-0008",
+                name: "Liakat Ali Biswas",
+                alias: "Liakat Kidnapper",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=liakat&backgroundColor=1a1a2e",
+                age: 40,
+                gender: "Male",
+                bloodGroup: "A+",
+                nationality: "Bangladeshi",
+                nid: "1984XXXXXXX008",
+                division: "Rangpur",
+                district: "Rangpur",
+                lastKnownLocation: "Mithapukur, Rangpur",
+                height: "5'10\"",
+                weight: "75 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Deep scar on forehead, crooked nose",
+                crimeType: "Kidnapping",
+                threatLevel: "high",
+                status: "wanted",
+                bounty: "৳3,50,000",
+                bio: "Liakat Ali Biswas has been involved in over 20 kidnapping cases across the Rangpur and Rajshahi divisions. He targets wealthy businessmen and their family members, demanding ransoms ranging from ৳10 lakh to ৳1 crore. His gang is known for holding victims in remote char areas along the Brahmaputra river. Two victims have died in captivity.",
+                criminalRecords: [
+                    { date: "2014-05-18", charge: "Kidnapping", desc: "Kidnapped rice mill owner, ৳50 lakh ransom" },
+                    { date: "2016-02-25", charge: "Kidnapping & Murder", desc: "Victim died in captivity due to torture" },
+                    { date: "2018-09-10", charge: "Kidnapping", desc: "Kidnapped businessman's son from school" },
+                    { date: "2020-12-03", charge: "Kidnapping & Extortion", desc: "Serial kidnapper targeting traders" },
+                    { date: "2022-06-15", charge: "Kidnapping", desc: "Kidnapped doctor from Mithapukur" },
+                    { date: "2023-11-28", charge: "Kidnapping & Murder", desc: "Second victim death, massive manhunt launched" }
+                ],
+                associates: [
+                    { name: "Motaleb Hossain", relation: "Gang Member" },
+                    { name: "Nur Islam", relation: "Lookout" },
+                    { name: "Hasina Begum", relation: "Safehouse Keeper" }
+                ],
+                tags: ["kidnapping", "ransom", "murder"],
+                warrants: 4
+            },
+            {
+                id: "BD-CRM-2024-0009",
+                name: "Rafiqul Islam Molla",
+                alias: "Rafiq Terrorist",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=rafiq&backgroundColor=1a1a2e",
+                age: 37,
+                gender: "Male",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1987XXXXXXX009",
+                division: "Dhaka",
+                district: "Manikganj",
+                lastKnownLocation: "Unknown - Possibly hiding in hill tracts",
+                height: "5'8\"",
+                weight: "70 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Full beard, prayer mark on forehead",
+                crimeType: "Terrorism",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳15,00,000",
+                bio: "Rafiqul Islam Molla is a key operative of an extremist militant organization linked to international terrorist networks. He was involved in planning multiple bomb attacks and is suspected of recruiting youth for radical activities. He received training abroad and returned to Bangladesh to establish terror cells. He is one of the most wanted fugitives by the Counter Terrorism & Transnational Crime (CTTC) unit.",
+                criminalRecords: [
+                    { date: "2015-10-03", charge: "Terrorism (Anti-Terrorism Act)", desc: "Planned bomb attack on cultural event" },
+                    { date: "2016-07-01", charge: "Terrorism", desc: "Linked to Holey Artisan attack investigation" },
+                    { date: "2018-01-20", charge: "Terrorism & Recruitment", desc: "Recruited 15 youths for militant training" },
+                    { date: "2019-06-11", charge: "Explosives Possession", desc: "Bomb-making materials found in hideout" },
+                    { date: "2021-03-05", charge: "Terrorism Financing", desc: "Channeling funds through NGO fronts" },
+                    { date: "2023-09-12", charge: "Terrorism", desc: "Plot to attack public gathering foiled by CTTC" }
+                ],
+                associates: [
+                    { name: "Classified", relation: "Cell Leader" },
+                    { name: "International Network", relation: "Foreign Connection" },
+                    { name: "Habibur Rahman", relation: "Recruiter" },
+                    { name: "Classified", relation: "Finance" }
+                ],
+                tags: ["terrorism", "militant", "bomb", "recruitment"],
+                warrants: 8
+            },
+            {
+                id: "BD-CRM-2024-0010",
+                name: "Shahida Akter",
+                alias: "Shahida Fraud Queen",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=shahida&backgroundColor=1a1a2e",
+                age: 44,
+                gender: "Female",
+                bloodGroup: "AB-",
+                nationality: "Bangladeshi",
+                nid: "1980XXXXXXX010",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Gulshan, Dhaka",
+                height: "5'5\"",
+                weight: "68 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Always well-dressed, multiple identities",
+                crimeType: "Fraud",
+                threatLevel: "medium",
+                status: "captured",
+                bounty: "৳2,00,000",
+                bio: "Shahida Akter ran one of the most sophisticated financial fraud operations in Bangladesh. She created multiple fake companies and investment schemes that defrauded over 10,000 victims of an estimated ৳500 crore. She lived a lavish lifestyle in Gulshan while her victims lost their life savings. She used multiple fake identities and had offshore bank accounts in Dubai and Singapore.",
+                criminalRecords: [
+                    { date: "2017-02-14", charge: "Financial Fraud", desc: "Ponzi scheme defrauded 2000 investors" },
+                    { date: "2019-05-30", charge: "Money Laundering", desc: "Laundered ৳100 crore through shell companies" },
+                    { date: "2020-11-22", charge: "Identity Fraud", desc: "Created 8 fake identities with forged documents" },
+                    { date: "2022-08-10", charge: "Financial Fraud (Major)", desc: "New investment scam with ৳300 crore losses" },
+                    { date: "2024-03-01", charge: "Arrested by CID", desc: "Captured at Shahjalal Airport while fleeing" }
+                ],
+                associates: [
+                    { name: "Zahir Uddin", relation: "Accountant" },
+                    { name: "Rubina Khan", relation: "Co-conspirator" },
+                    { name: "Offshore Contacts", relation: "Money Laundering" }
+                ],
+                tags: ["fraud", "ponzi scheme", "money laundering"],
+                warrants: 2
+            },
+            {
+                id: "BD-CRM-2024-0011",
+                name: "Jahangirnagar Kabir",
+                alias: "Jahangir Chor",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=jahangir&backgroundColor=1a1a2e",
+                age: 33,
+                gender: "Male",
+                bloodGroup: "O+",
+                nationality: "Bangladeshi",
+                nid: "1991XXXXXXX011",
+                division: "Barisal",
+                district: "Barisal",
+                lastKnownLocation: "Barisal Launch Ghat area",
+                height: "5'7\"",
+                weight: "68 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Missing left ear, anchor tattoo on shoulder",
+                crimeType: "Robbery",
+                threatLevel: "medium",
+                status: "active",
+                bounty: "৳1,50,000",
+                bio: "Jahangirnagar Kabir specializes in river piracy and launch robberies in the southern waterways of Bangladesh. His gang targets passenger launches, cargo boats, and fishing vessels in the Barisal-Patuakhali river routes. He is a skilled swimmer and boatman who uses the complex river delta geography to evade authorities.",
+                criminalRecords: [
+                    { date: "2016-08-20", charge: "River Piracy", desc: "Robbed passenger launch on Kirtankhola river" },
+                    { date: "2018-03-15", charge: "Armed Robbery", desc: "Attacked cargo vessel carrying electronics" },
+                    { date: "2020-06-10", charge: "Robbery & Assault", desc: "Multiple passengers assaulted during launch robbery" },
+                    { date: "2022-01-08", charge: "River Piracy", desc: "Hijacked fishing trawler" },
+                    { date: "2023-09-30", charge: "Armed Robbery", desc: "Major launch robbery, 50+ passengers robbed" }
+                ],
+                associates: [
+                    { name: "Sumon Hawlader", relation: "Boat Operator" },
+                    { name: "Gazi Abdur Rashid", relation: "Gang Member" },
+                    { name: "Dulal Mridha", relation: "Informant" }
+                ],
+                tags: ["robbery", "river piracy", "armed"],
+                warrants: 3
+            },
+            {
+                id: "BD-CRM-2024-0012",
+                name: "Md. Helal Uddin",
+                alias: "Helal Killer",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=helal&backgroundColor=1a1a2e",
+                age: 31,
+                gender: "Male",
+                bloodGroup: "A+",
+                nationality: "Bangladeshi",
+                nid: "1993XXXXXXX012",
+                division: "Mymensingh",
+                district: "Mymensingh",
+                lastKnownLocation: "Trishal, Mymensingh",
+                height: "5'9\"",
+                weight: "72 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Bullet wound scar on left shoulder",
+                crimeType: "Murder",
+                threatLevel: "high",
+                status: "wanted",
+                bounty: "৳3,00,000",
+                bio: "Md. Helal Uddin is a serial offender responsible for at least 5 murders linked to land disputes and personal vendettas in the Mymensingh region. He operates with a small but loyal group of associates and is known for his violent temper and willingness to kill. He has survived multiple police encounters and is considered armed and dangerous.",
+                criminalRecords: [
+                    { date: "2017-04-22", charge: "Murder (Section 302)", desc: "Killed rival in land dispute" },
+                    { date: "2019-01-10", charge: "Attempted Murder", desc: "Attacked farmer over land boundary" },
+                    { date: "2020-07-05", charge: "Murder", desc: "Killed two brothers in vendetta killing" },
+                    { date: "2022-10-18", charge: "Murder & Arson", desc: "Burned down house, one dead" },
+                    { date: "2024-01-30", charge: "Murder", desc: "Latest killing, witness protection needed" }
+                ],
+                associates: [
+                    { name: "Alamgir Hossain", relation: "Partner" },
+                    { name: "Rubel Mia", relation: "Associate" }
+                ],
+                tags: ["murder", "land dispute", "serial killer"],
+                warrants: 5
+            },
+            {
+                id: "BD-CRM-2024-0013",
+                name: "Sakina Khatun",
+                alias: "Sakina Poison",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=sakina&backgroundColor=1a1a2e",
+                age: 48,
+                gender: "Female",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1976XXXXXXX013",
+                division: "Dhaka",
+                district: "Munshiganj",
+                lastKnownLocation: "Munshiganj Sadar",
+                height: "5'3\"",
+                weight: "58 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Henna-stained hands, distinctive voice",
+                crimeType: "Murder",
+                threatLevel: "high",
+                status: "captured",
+                bounty: "৳2,00,000",
+                bio: "Sakina Khatun is a convicted serial poisoner who murdered 4 husbands and 2 in-laws over a span of 15 years to inherit their property. She used a combination of arsenic and traditional herbal poisons. Her crimes went undetected for years as deaths were attributed to natural causes until a suspicious relative demanded an autopsy.",
+                criminalRecords: [
+                    { date: "2008-03-15", charge: "Murder by Poisoning", desc: "First husband died - initially ruled natural causes" },
+                    { date: "2012-09-20", charge: "Murder by Poisoning", desc: "Second husband and mother-in-law poisoned" },
+                    { date: "2016-06-10", charge: "Murder by Poisoning", desc: "Third husband poisoned" },
+                    { date: "2020-02-28", charge: "Murder by Poisoning", desc: "Fourth husband, father-in-law poisoned" },
+                    { date: "2023-04-10", charge: "Arrested - All Cases Reopened", desc: "Autopsy revealed arsenic in all victims" }
+                ],
+                associates: [
+                    { name: "Kabori Begum", relation: "Poison Supplier" },
+                    { name: "Local Kabiraj", relation: "Herbal Source" }
+                ],
+                tags: ["murder", "serial killer", "poison"],
+                warrants: 0
+            },
+            {
+                id: "BD-CRM-2024-0014",
+                name: "Rezwan Ahmed Chowdhury",
+                alias: "Rezwan Don",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=rezwan&backgroundColor=1a1a2e",
+                age: 46,
+                gender: "Male",
+                bloodGroup: "A+",
+                nationality: "Bangladeshi",
+                nid: "1978XXXXXXX014",
+                division: "Chittagong",
+                district: "Cox's Bazar",
+                lastKnownLocation: "Teknaf, Cox's Bazar",
+                height: "5'10\"",
+                weight: "80 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Gold chains, always carries prayer beads",
+                crimeType: "Drug Trafficking",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳12,00,000",
+                bio: "Rezwan Ahmed Chowdhury controls the primary Yaba smuggling corridor between Myanmar and Bangladesh through the Teknaf-Ukhiya route. He has deep connections with Rohingya refugee camp networks and uses them as distribution points. He is one of the top 5 most wanted drug lords in Bangladesh and has survived 3 assassination attempts by rival gangs.",
+                criminalRecords: [
+                    { date: "2013-07-15", charge: "Drug Trafficking", desc: "First major Yaba seizure linked to him" },
+                    { date: "2015-11-20", charge: "Drug Trafficking & Murder", desc: "Killed rival drug dealer in Teknaf" },
+                    { date: "2017-04-05", charge: "Drug Trafficking", desc: "10 lakh Yaba tablets seized from his network" },
+                    { date: "2019-08-12", charge: "Drug Trafficking", desc: "International drug ring exposed" },
+                    { date: "2021-02-28", charge: "Drug Trafficking & Arms", desc: "Arms found with drug shipment" },
+                    { date: "2023-06-15", charge: "Drug Trafficking", desc: "Massive operation, 50 lakh tablets seized" },
+                    { date: "2024-03-10", charge: "Drug Trafficking", desc: "Still at large, reward increased" }
+                ],
+                associates: [
+                    { name: "Myanmar Contacts", relation: "Supply Chain" },
+                    { name: "Nurul Amin", relation: "Distribution" },
+                    { name: "Ismail Khan", relation: "Transport" },
+                    { name: "Camp Networks", relation: "Local Distribution" }
+                ],
+                tags: ["drug trafficking", "yaba", "organized crime", "murder"],
+                warrants: 8
+            },
+            {
+                id: "BD-CRM-2024-0015",
+                name: "Babul Akter",
+                alias: "Babul OC",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=babul&backgroundColor=1a1a2e",
+                age: 52,
+                gender: "Male",
+                bloodGroup: "O+",
+                nationality: "Bangladeshi",
+                nid: "1972XXXXXXX015",
+                division: "Chittagong",
+                district: "Feni",
+                lastKnownLocation: "Feni Sadar",
+                height: "5'6\"",
+                weight: "88 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Mustache, authoritative demeanor",
+                crimeType: "Murder",
+                threatLevel: "high",
+                status: "captured",
+                bounty: "৳5,00,000",
+                bio: "Babul Akter is a former police officer who was convicted of murdering his wife in a case that shocked the nation. The case exposed deep issues of domestic violence and abuse of power within law enforcement. His trial became one of the most high-profile criminal cases in recent Bangladesh history.",
+                criminalRecords: [
+                    { date: "2019-06-05", charge: "Murder (Section 302)", desc: "Murder of wife Mahmuda Akter" },
+                    { date: "2019-06-10", charge: "Evidence Tampering", desc: "Attempted to tamper with crime scene" },
+                    { date: "2020-09-30", charge: "Convicted", desc: "Death sentence by Feni court" }
+                ],
+                associates: [
+                    { name: "Former Colleagues", relation: "Cover-up Attempt" }
+                ],
+                tags: ["murder", "domestic violence", "former police"],
+                warrants: 0
+            },
+            {
+                id: "BD-CRM-2024-0016",
+                name: "Sohel Rana",
+                alias: "Rana Builder",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=sohel&backgroundColor=1a1a2e",
+                age: 41,
+                gender: "Male",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1983XXXXXXX016",
+                division: "Dhaka",
+                district: "Savar",
+                lastKnownLocation: "Savar, Dhaka",
+                height: "5'8\"",
+                weight: "75 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Clean-shaven, well-groomed appearance",
+                crimeType: "Fraud",
+                threatLevel: "medium",
+                status: "captured",
+                bounty: "৳1,00,000",
+                bio: "Sohel Rana ran a massive real estate fraud operation selling fake land documents and non-existent apartments. Over 500 families were defrauded, many losing their entire life savings. He operated through a network of fake real estate companies with elaborate showrooms and marketing campaigns.",
+                criminalRecords: [
+                    { date: "2018-05-20", charge: "Real Estate Fraud", desc: "Sold fake apartments to 200 families" },
+                    { date: "2020-08-15", charge: "Document Forgery & Fraud", desc: "Forged land documents worth ৳200 crore" },
+                    { date: "2022-03-10", charge: "Financial Fraud", desc: "New scheme defrauded 300 more families" },
+                    { date: "2023-12-01", charge: "Arrested by RAB", desc: "Captured while trying to flee to India" }
+                ],
+                associates: [
+                    { name: "Jakir Hossain", relation: "Land Registrar (Corrupt)" },
+                    { name: "Marketing Team", relation: "Fraud Operations" }
+                ],
+                tags: ["fraud", "real estate", "forgery"],
+                warrants: 1
+            },
+            {
+                id: "BD-CRM-2024-0017",
+                name: "Noor Mohammad Sheikh",
+                alias: "Noor Smuggler",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=noor&backgroundColor=1a1a2e",
+                age: 58,
+                gender: "Male",
+                bloodGroup: "AB+",
+                nationality: "Bangladeshi",
+                nid: "1966XXXXXXX017",
+                division: "Rajshahi",
+                district: "Chapainawabganj",
+                lastKnownLocation: "Shibganj, Chapainawabganj",
+                height: "5'5\"",
+                weight: "72 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Grey beard, walks slowly, uses a cane",
+                crimeType: "Drug Trafficking",
+                threatLevel: "medium",
+                status: "active",
+                bounty: "৳2,00,000",
+                bio: "Noor Mohammad Sheikh has been running a cross-border smuggling operation for over 30 years along the India-Bangladesh border at Chapainawabganj. He smuggles Phensedyl (codeine-based cough syrup), Indian liquor, and cattle. Despite his age, he remains active and commands a network of young operatives.",
+                criminalRecords: [
+                    { date: "1995-03-10", charge: "Smuggling", desc: "First arrest for cattle smuggling" },
+                    { date: "2005-09-15", charge: "Drug Smuggling", desc: "Phensedyl smuggling across border" },
+                    { date: "2012-06-20", charge: "Drug Trafficking", desc: "Large Phensedyl consignment seized" },
+                    { date: "2018-11-08", charge: "Smuggling & Bribery", desc: "Bribing border officials exposed" },
+                    { date: "2023-04-22", charge: "Drug Trafficking", desc: "Still operating, new routes identified" }
+                ],
+                associates: [
+                    { name: "Indian Contacts", relation: "Cross-border Supply" },
+                    { name: "Local Youth", relation: "Carriers" },
+                    { name: "Border Officials", relation: "Corrupt Guards" }
+                ],
+                tags: ["drug trafficking", "smuggling", "phensedyl", "cross-border"],
+                warrants: 2
+            },
+            {
+                id: "BD-CRM-2024-0018",
+                name: "Imran Hossain",
+                alias: "Imran Boma",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=imran&backgroundColor=1a1a2e",
+                age: 29,
+                gender: "Male",
+                bloodGroup: "B-",
+                nationality: "Bangladeshi",
+                nid: "1995XXXXXXX018",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Mirpur, Dhaka",
+                height: "5'11\"",
+                weight: "78 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Muscular build, knife scar on right forearm",
+                crimeType: "Extortion",
+                threatLevel: "medium",
+                status: "active",
+                bounty: "৳1,50,000",
+                bio: "Imran Hossain controls extortion operations in the Mirpur area of Dhaka, targeting small businesses, street vendors, and construction sites. He leads a gang of approximately 20 young men who enforce 'toll' collections through intimidation and violence. He has connections with local political figures who provide him protection.",
+                criminalRecords: [
+                    { date: "2018-02-10", charge: "Extortion", desc: "Extorting businesses in Mirpur-10 area" },
+                    { date: "2019-07-22", charge: "Extortion & Assault", desc: "Brutally assaulted shopkeeper" },
+                    { date: "2021-04-15", charge: "Extortion & Arson", desc: "Set fire to mobile shop after refusal" },
+                    { date: "2022-10-30", charge: "Extortion", desc: "Systematic toll collection from vendors" },
+                    { date: "2024-01-05", charge: "Extortion & Threats", desc: "Death threats to business owners" }
+                ],
+                associates: [
+                    { name: "Milon Ahmed", relation: "Enforcer" },
+                    { name: "Tozammel Haque", relation: "Political Connection" },
+                    { name: "Various Youth", relation: "Gang Members" }
+                ],
+                tags: ["extortion", "gang", "assault"],
+                warrants: 2
+            },
+            {
+                id: "BD-CRM-2024-0019",
+                name: "Dilara Zaman",
+                alias: "Dilara Kidnapper",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=dilara&backgroundColor=1a1a2e",
+                age: 39,
+                gender: "Female",
+                bloodGroup: "A-",
+                nationality: "Bangladeshi",
+                nid: "1985XXXXXXX019",
+                division: "Khulna",
+                district: "Jessore",
+                lastKnownLocation: "Benapole, Jessore",
+                height: "5'6\"",
+                weight: "62 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Dresses in expensive saris, speaks multiple languages",
+                crimeType: "Kidnapping",
+                threatLevel: "high",
+                status: "wanted",
+                bounty: "৳4,00,000",
+                bio: "Dilara Zaman operates a kidnapping and extortion ring targeting wealthy NRB (Non-Resident Bangladeshi) families. She lures victims through fake marriage proposals and business partnerships, then kidnaps family members for ransom. She has connections in India and the Middle East.",
+                criminalRecords: [
+                    { date: "2017-03-20", charge: "Kidnapping", desc: "Kidnapped NRB businessman's mother" },
+                    { date: "2019-06-15", charge: "Kidnapping & Extortion", desc: "₹2 crore ransom demanded from UK-based family" },
+                    { date: "2021-09-10", charge: "Kidnapping & Fraud", desc: "Marriage fraud turned kidnapping" },
+                    { date: "2023-02-28", charge: "Kidnapping", desc: "International kidnapping ring exposed" }
+                ],
+                associates: [
+                    { name: "Cross-border Agents", relation: "India Connection" },
+                    { name: "Fake Marriage Brokers", relation: "Recruitment" },
+                    { name: "Rashid Bepari", relation: "Finance" }
+                ],
+                tags: ["kidnapping", "extortion", "fraud", "international"],
+                warrants: 4
+            },
+            {
+                id: "BD-CRM-2024-0020",
+                name: "Azizul Haque Moral",
+                alias: "Moral Don",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=moral&backgroundColor=1a1a2e",
+                age: 60,
+                gender: "Male",
+                bloodGroup: "O+",
+                nationality: "Bangladeshi",
+                nid: "1964XXXXXXX020",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Old Dhaka",
+                height: "5'5\"",
+                weight: "85 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Grey hair, wears traditional clothing, distinctive laugh",
+                crimeType: "Extortion",
+                threatLevel: "high",
+                status: "active",
+                bounty: "৳5,00,000",
+                bio: "Azizul Haque, known as 'Moral Don', is one of the oldest active crime lords in Old Dhaka. He has been running extortion, illegal gambling, and underground money lending operations for over 35 years. His network is deeply embedded in the Old Dhaka community and he wields significant influence over local politics and business. Multiple attempts to arrest him have failed due to his extensive network of informants.",
+                criminalRecords: [
+                    { date: "1990-05-15", charge: "Extortion", desc: "First recorded extortion case" },
+                    { date: "2000-08-20", charge: "Illegal Gambling & Extortion", desc: "Running gambling dens in Old Dhaka" },
+                    { date: "2008-12-10", charge: "Money Lending & Intimidation", desc: "Illegal money lending at extreme interest" },
+                    { date: "2015-03-25", charge: "Extortion & Corruption", desc: "Large-scale extortion of Old Dhaka businesses" },
+                    { date: "2019-07-14", charge: "Extortion & Murder Connection", desc: "Linked to murder of non-paying debtor" },
+                    { date: "2023-11-05", charge: "Ongoing Criminal Enterprise", desc: "Still operating extensive criminal network" }
+                ],
+                associates: [
+                    { name: "Old Dhaka Network", relation: "Criminal Empire" },
+                    { name: "Local Politicians", relation: "Political Cover" },
+                    { name: "Moneylender Network", relation: "Finance" },
+                    { name: "30+ Gang Members", relation: "Enforcers" }
+                ],
+                tags: ["extortion", "organized crime", "gambling", "money lending"],
+                warrants: 3
+            },
+            {
+                id: "BD-CRM-2024-0021",
+                name: "Farhad Mazhar",
+                alias: "Farhad Cyber",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=farhad&backgroundColor=1a1a2e",
+                age: 25,
+                gender: "Male",
+                bloodGroup: "A+",
+                nationality: "Bangladeshi",
+                nid: "1999XXXXXXX021",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Uttara, Dhaka",
+                height: "5'7\"",
+                weight: "60 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Thin build, always carries laptop bag",
+                crimeType: "Cybercrime",
+                threatLevel: "medium",
+                status: "wanted",
+                bounty: "৳1,50,000",
+                bio: "Farhad Mazhar is a young cybercriminal who specialized in cryptocurrency scams and social media account hacking. He ran fake cryptocurrency investment platforms and hacked social media accounts of celebrities and businesses for ransom. He is technically sophisticated and operates through VPNs and dark web.",
+                criminalRecords: [
+                    { date: "2021-04-10", charge: "Cybercrime", desc: "Cryptocurrency scam defrauding 1000 investors" },
+                    { date: "2022-07-20", charge: "Hacking & Extortion", desc: "Hacked 500+ social media accounts" },
+                    { date: "2023-01-15", charge: "Cybercrime & Fraud", desc: "Fake crypto exchange platform" },
+                    { date: "2024-02-28", charge: "Cybercrime", desc: "New crypto scam identified, still at large" }
+                ],
+                associates: [
+                    { name: "Dark Web Contacts", relation: "Technical Support" },
+                    { name: "Ashraf Ali", relation: "Money Mule Network" }
+                ],
+                tags: ["cybercrime", "cryptocurrency", "hacking", "fraud"],
+                warrants: 2
+            },
+            {
+                id: "BD-CRM-2024-0022",
+                name: "Mostafa Kamal Pasha",
+                alias: "Pasha Arms",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=pasha&backgroundColor=1a1a2e",
+                age: 49,
+                gender: "Male",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1975XXXXXXX022",
+                division: "Chittagong",
+                district: "Chittagong Hill Tracts",
+                lastKnownLocation: "Bandarban Hills",
+                height: "5'9\"",
+                weight: "76 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Military-style crew cut, camouflage clothing",
+                crimeType: "Arms Dealing",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳7,00,000",
+                bio: "Mostafa Kamal Pasha operates a sophisticated arms trafficking network through the Chittagong Hill Tracts, leveraging the rugged terrain and porous border with Myanmar. He supplies weapons to insurgent groups, criminal gangs, and has been linked to international arms trafficking networks. He has military training and uses guerrilla tactics to evade law enforcement.",
+                criminalRecords: [
+                    { date: "2010-05-10", charge: "Arms Trafficking", desc: "First major arms cache discovered" },
+                    { date: "2014-09-18", charge: "Arms Dealing & Insurgency", desc: "Supplying weapons to insurgent groups" },
+                    { date: "2017-03-22", charge: "Arms Trafficking", desc: "Cross-border arms shipment intercepted" },
+                    { date: "2020-11-05", charge: "Arms Dealing & Murder", desc: "Killed army informant" },
+                    { date: "2023-08-15", charge: "Arms Trafficking", desc: "Large weapons cache found in Bandarban" }
+                ],
+                associates: [
+                    { name: "Myanmar Rebel Groups", relation: "Supply" },
+                    { name: "Hill Tract Networks", relation: "Distribution" },
+                    { name: "Zahid Hasan", relation: "Logistics" }
+                ],
+                tags: ["arms dealing", "insurgency", "cross-border", "military"],
+                warrants: 5
+            },
+            {
+                id: "BD-CRM-2024-0023",
+                name: "Ruhul Amin Khan",
+                alias: "Ruhul Dacoit",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=ruhul&backgroundColor=1a1a2e",
+                age: 36,
+                gender: "Male",
+                bloodGroup: "O-",
+                nationality: "Bangladeshi",
+                nid: "1988XXXXXXX023",
+                division: "Rajshahi",
+                district: "Bogra",
+                lastKnownLocation: "Sherpur, Bogra",
+                height: "6'1\"",
+                weight: "88 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Very tall, muscular, shaved head",
+                crimeType: "Robbery",
+                threatLevel: "high",
+                status: "active",
+                bounty: "৳2,50,000",
+                bio: "Ruhul Amin Khan leads a well-organized dacoity gang operating across the Rajshahi division. His gang is known for violent home invasions targeting wealthy farming families and rural businesses. They operate at night and use motorcycles for quick escapes through rural roads.",
+                criminalRecords: [
+                    { date: "2016-01-20", charge: "Dacoity", desc: "Home invasion robbery in Bogra" },
+                    { date: "2018-05-15", charge: "Dacoity & Assault", desc: "Violent robbery of farmer family" },
+                    { date: "2020-09-08", charge: "Dacoity with Murder", desc: "Home owner killed during robbery" },
+                    { date: "2022-04-12", charge: "Armed Dacoity", desc: "Multiple robberies in one night" },
+                    { date: "2024-02-20", charge: "Dacoity", desc: "Recent spree of rural robberies" }
+                ],
+                associates: [
+                    { name: "Motorcycle Gang", relation: "8 Members" },
+                    { name: "Salam Bepari", relation: "Fence" }
+                ],
+                tags: ["robbery", "dacoity", "home invasion", "violent"],
+                warrants: 4
+            },
+            {
+                id: "BD-CRM-2024-0024",
+                name: "Taslima Nasrin Poly",
+                alias: "Poly Smuggler",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=poly&backgroundColor=1a1a2e",
+                age: 32,
+                gender: "Female",
+                bloodGroup: "AB+",
+                nationality: "Bangladeshi",
+                nid: "1992XXXXXXX024",
+                division: "Sylhet",
+                district: "Sylhet",
+                lastKnownLocation: "Sylhet Airport Area",
+                height: "5'5\"",
+                weight: "55 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Attractive appearance, uses disguises",
+                crimeType: "Drug Trafficking",
+                threatLevel: "medium",
+                status: "captured",
+                bounty: "৳1,00,000",
+                bio: "Taslima Nasrin Poly used the Sylhet-UK immigration corridor to smuggle drugs and gold. She recruited young women as mules and operated through fake travel agencies. Her network exploited the large Sylheti diaspora in London. She was arrested at Osmani Airport with 5kg of gold and drug samples.",
+                criminalRecords: [
+                    { date: "2019-08-10", charge: "Gold Smuggling", desc: "First caught with concealed gold" },
+                    { date: "2021-03-22", charge: "Drug Smuggling", desc: "Used mules to carry drugs to UK" },
+                    { date: "2022-11-15", charge: "Drug & Gold Smuggling", desc: "International smuggling network" },
+                    { date: "2023-09-20", charge: "Arrested", desc: "Captured at Osmani International Airport" }
+                ],
+                associates: [
+                    { name: "UK-based Network", relation: "Distribution" },
+                    { name: "Travel Agency Front", relation: "Operations" },
+                    { name: "Young Women Recruits", relation: "Mules" }
+                ],
+                tags: ["drug trafficking", "gold smuggling", "international"],
+                warrants: 1
+            },
+            {
+                id: "BD-CRM-2024-0025",
+                name: "Abul Kalam Azad",
+                alias: "Kalam Mastermind",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=kalam&backgroundColor=1a1a2e",
+                age: 43,
+                gender: "Male",
+                bloodGroup: "A+",
+                nationality: "Bangladeshi",
+                nid: "1981XXXXXXX025",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Banani, Dhaka",
+                height: "5'8\"",
+                weight: "73 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Well-dressed, intellectual appearance, glasses",
+                crimeType: "Fraud",
+                threatLevel: "medium",
+                status: "active",
+                bounty: "৳3,00,000",
+                bio: "Abul Kalam Azad is a white-collar criminal who orchestrated Bangladesh's largest MLM (Multi-Level Marketing) scam, defrauding over 50,000 people across the country. His company, 'Golden Bangladesh Ltd.', promised unrealistic returns on investments. He fled multiple times but continues to operate new schemes through proxy companies. He has a business degree and uses his intellectual appearance to gain trust.",
+                criminalRecords: [
+                    { date: "2016-06-10", charge: "Financial Fraud", desc: "Golden Bangladesh MLM scam - ৳1000 crore" },
+                    { date: "2018-09-25", charge: "Fraud & Money Laundering", desc: "New scheme through proxy company" },
+                    { date: "2020-02-14", charge: "Financial Fraud", desc: "Online investment scam" },
+                    { date: "2022-07-30", charge: "Fraud", desc: "Cryptocurrency-based pyramid scheme" },
+                    { date: "2024-01-10", charge: "Financial Fraud", desc: "Latest scheme targeting rural investors" }
+                ],
+                associates: [
+                    { name: "Network of Agents", relation: "MLM Downline" },
+                    { name: "CA Firm", relation: "Financial Manipulation" },
+                    { name: "Shafiqul Islam", relation: "Tech Operations" }
+                ],
+                tags: ["fraud", "mlm scam", "money laundering", "white collar"],
+                warrants: 3
+            },
+            {
+                id: "BD-CRM-2024-0026",
+                name: "Mohammad Shahin",
+                alias: "Shahin Terrorist",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=shahin&backgroundColor=1a1a2e",
+                age: 34,
+                gender: "Male",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1990XXXXXXX026",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Unknown - Possibly abroad",
+                height: "5'10\"",
+                weight: "75 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Long beard, calm demeanor",
+                crimeType: "Terrorism",
+                threatLevel: "critical",
+                status: "wanted",
+                bounty: "৳20,00,000",
+                bio: "Mohammad Shahin is a top-tier terrorist operative wanted for planning and executing multiple bomb attacks across Bangladesh. He is believed to be a key strategist for an international militant network. He has technical expertise in explosive devices and has trained others in bomb-making. He is believed to have fled Bangladesh but maintains operational control over local cells through encrypted communications.",
+                criminalRecords: [
+                    { date: "2015-02-26", charge: "Terrorism", desc: "Planned attack on diplomatic zone" },
+                    { date: "2016-07-01", charge: "Terrorism (Major)", desc: "Key planner of major terrorist attack" },
+                    { date: "2017-12-20", charge: "Bomb Making", desc: "Bomb factory discovered in Jhenaidah" },
+                    { date: "2019-04-21", charge: "Terrorism Financing", desc: "International terror financing network" },
+                    { date: "2021-06-15", charge: "Terrorism", desc: "Foiled attack on Independence Day" },
+                    { date: "2023-03-26", charge: "Terrorism", desc: "Remote control of local terror cells" }
+                ],
+                associates: [
+                    { name: "International Network", relation: "Command Structure" },
+                    { name: "Multiple Cells", relation: "Local Operations" },
+                    { name: "Classified", relation: "Bomb Expert" }
+                ],
+                tags: ["terrorism", "bomb maker", "international", "most wanted"],
+                warrants: 10
+            },
+            {
+                id: "BD-CRM-2024-0027",
+                name: "Golam Rabbani",
+                alias: "Rabbani Land Grabber",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=rabbani&backgroundColor=1a1a2e",
+                age: 56,
+                gender: "Male",
+                bloodGroup: "O+",
+                nationality: "Bangladeshi",
+                nid: "1968XXXXXXX027",
+                division: "Dhaka",
+                district: "Dhaka",
+                lastKnownLocation: "Uttara, Dhaka",
+                height: "5'7\"",
+                weight: "90 kg",
+                complexion: "Fair",
+                distinguishingMarks: "Obese, wears expensive rings, bald",
+                crimeType: "Fraud",
+                threatLevel: "medium",
+                status: "active",
+                bounty: "৳2,00,000",
+                bio: "Golam Rabbani is a notorious land grabber who has illegally seized hundreds of acres of land across Dhaka division using forged documents, intimidation, and corrupt officials. He targets government khas land, minority-owned properties, and disputed lands. He has made a fortune estimated at over ৳5000 crore through his land grabbing empire.",
+                criminalRecords: [
+                    { date: "2005-08-10", charge: "Land Grabbing", desc: "Seized 50 acres of khas land in Savar" },
+                    { date: "2010-03-22", charge: "Fraud & Forgery", desc: "Forged documents for 100 acres" },
+                    { date: "2015-11-18", charge: "Land Grabbing & Intimidation", desc: "Forcefully evicted minority families" },
+                    { date: "2019-06-30", charge: "Land Grabbing", desc: "Seized wetland for illegal development" },
+                    { date: "2023-05-15", charge: "Fraud & Land Grabbing", desc: "Ongoing land seizure operations" }
+                ],
+                associates: [
+                    { name: "Corrupt Land Officials", relation: "Government Contacts" },
+                    { name: "Musclemen", relation: "Enforcement" },
+                    { name: "Fake Lawyer Network", relation: "Legal Fraud" }
+                ],
+                tags: ["fraud", "land grabbing", "forgery", "corruption"],
+                warrants: 2
+            },
+            {
+                id: "BD-CRM-2024-0028",
+                name: "Kamrul Hassan Sarker",
+                alias: "Kamrul Hijacker",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=kamrul&backgroundColor=1a1a2e",
+                age: 30,
+                gender: "Male",
+                bloodGroup: "A-",
+                nationality: "Bangladeshi",
+                nid: "1994XXXXXXX028",
+                division: "Dhaka",
+                district: "Tangail",
+                lastKnownLocation: "Dhaka-Tangail Highway",
+                height: "5'10\"",
+                weight: "70 kg",
+                complexion: "Medium",
+                distinguishingMarks: "Athletic build, motorbike rider",
+                crimeType: "Robbery",
+                threatLevel: "medium",
+                status: "wanted",
+                bounty: "৳1,00,000",
+                bio: "Kamrul Hassan Sarker leads a highway robbery gang that operates on the Dhaka-Tangail-Mymensingh highway corridor. His gang uses motorcycles and cars to block vehicles, then robs passengers and cargo. They primarily target long-distance buses at night and goods-carrying trucks.",
+                criminalRecords: [
+                    { date: "2019-03-15", charge: "Highway Robbery", desc: "Robbed night bus on Tangail highway" },
+                    { date: "2020-08-22", charge: "Armed Highway Robbery", desc: "Armed robbery of cargo truck" },
+                    { date: "2021-12-10", charge: "Highway Robbery & Assault", desc: "Multiple bus robberies in one month" },
+                    { date: "2023-06-05", charge: "Armed Robbery", desc: "Latest highway robbery with firearms" }
+                ],
+                associates: [
+                    { name: "Highway Gang", relation: "6 Core Members" },
+                    { name: "Corrupt Police", relation: "Tip-offs" }
+                ],
+                tags: ["robbery", "highway", "armed", "gang"],
+                warrants: 3
+            },
+            {
+                id: "BD-CRM-2024-0029",
+                name: "Nurjahan Begum",
+                alias: "Nurjahan Witch",
+                photo: "https://api.dicebear.com/7.x/personas/svg?seed=nurjahan&backgroundColor=1a1a2e",
+                age: 50,
+                gender: "Female",
+                bloodGroup: "B+",
+                nationality: "Bangladeshi",
+                nid: "1974XXXXXXX029",
+                division: "Rangpur",
+                district: "Kurigram",
+                lastKnownLocation: "Char Areas, Kurigram",
+                height: "5'2\"",
+                weight: "55 kg",
+                complexion: "Dark",
+                distinguishingMarks: "Traditional clothing, herbal medicine practitioner look",
+                crimeType: "Fraud",
+                threatLevel: "low",
+                status: "captured",
+                bounty: "৳50,000",
+                bio: "Nurjahan Begum posed as a spiritual healer and 'kabiraj' who defrauded hundreds of vulnerable villagers in the char areas of Kurigram. She claimed to cure diseases, solve family problems, and bring prosperity through supernatural means. She collected large sums of money and jewelry from desperate families. Some victims died after following her dangerous 'treatments' instead of seeking proper medical care.",
+                criminalRecords: [
+                    { date: "2018-05-10", charge: "Fraud", desc: "Defrauded 50 families as fake healer" },
+                    { date: "2020-09-15", charge: "Fraud & Negligent Homicide", desc: "Patient died following fake treatment" },
+                    { date: "2022-04-20", charge: "Fraud", desc: "Large-scale spiritual fraud operation" },
+                    { date: "2023-08-30", charge: "Arrested", desc: "Captured by local police after village complaint" }
+                ],
+                associates: [
+                    { name: "Assistants", relation: "Fraud Helpers" },
+                    { name: "Village Contacts", relation: "Recruitment" }
+                ],
+                tags: ["fraud", "spiritual scam", "negligent homicide"],
+                warrants: 0
+            }
+        ];
+
+        // ======================== FUNCTIONS ========================
+
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particle.style.width = (Math.random() * 3 + 1) + 'px';
+                particle.style.height = particle.style.width;
+                if (Math.random() > 0.5) particle.style.background = 'rgba(0,240,255,0.5)';
+                else particle.style.background = 'rgba(255,0,64,0.3)';
+                container.appendChild(particle);
+            }
+        }
+
+        // Update datetime
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('datetime').innerHTML = `${dateStr}<br>${timeStr} BST`;
+        }
+
+        // Update stats
+        function updateStats() {
+            const total = criminals.length;
+            const wanted = criminals.filter(c => c.status === 'wanted').length;
+            const captured = criminals.filter(c => c.status === 'captured').length;
+            const active = criminals.filter(c => c.status === 'active').length;
+
+            animateNumber('totalRecords', total);
+            animateNumber('mostWanted', wanted);
+            animateNumber('captured', captured);
+            animateNumber('activeCases', active);
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-GB');
+        }
+
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            let current = 0;
+            const increment = Math.ceil(target / 30);
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                el.textContent = current;
+            }, 40);
+        }
+
+        // Search
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const filter = document.getElementById('filterSelect').value;
+
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('noResults').classList.remove('active');
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+
+            setTimeout(() => {
+                let results = criminals.filter(c => {
+                    const matchesQuery = !query ||
+                        c.name.toLowerCase().includes(query) ||
+                        c.alias.toLowerCase().includes(query) ||
+                        c.id.toLowerCase().includes(query) ||
+                        c.crimeType.toLowerCase().includes(query) ||
+                        c.division.toLowerCase().includes(query) ||
+                        c.district.toLowerCase().includes(query) ||
+                        c.tags.some(t => t.includes(query)) ||
+                        c.bio.toLowerCase().includes(query);
+
+                    const matchesFilter = filter === 'all' || c.crimeType.toLowerCase() === filter;
+
+                    return matchesQuery && matchesFilter;
+                });
+
+                document.getElementById('loading').classList.remove('active');
+
+                if (results.length === 0) {
+                    document.getElementById('noResults').classList.add('active');
+                } else {
+                    displayResults(results);
+                }
+            }, 1200);
+        }
+
+        function displayResults(results) {
+            const grid = document.getElementById('resultsGrid');
+            const section = document.getElementById('resultsSection');
+            document.getElementById('resultsCount').textContent = results.length;
+
+            grid.innerHTML = '';
+
+            results.forEach((criminal, index) => {
+                const card = document.createElement('div');
+                card.className = 'criminal-card';
+                card.style.animationDelay = (index * 0.05) + 's';
+                card.onclick = () => showDetail(criminal);
+
+                const statusTag = getStatusTag(criminal.status);
+                const threatClass = `threat-${criminal.threatLevel}`;
+
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="card-avatar">
+                            <img src="${criminal.photo}" alt="${criminal.name}">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="glitch" data-text="${criminal.name}">${criminal.name}</h3>
+                            <div class="card-id">${criminal.id}</div>
+                            <div class="card-tags">
+                                <span class="tag ${getCrimeTagClass(criminal.crimeType)}">${criminal.crimeType}</span>
+                                ${statusTag}
+                            </div>
+                            <div class="card-meta">
+                                <span>📍 ${criminal.lastKnownLocation}</span>
+                                <span>🎭 Alias: ${criminal.alias}</span>
+                                <span>📋 Warrants: ${criminal.warrants}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="threat-level ${threatClass}">THREAT: ${criminal.threatLevel.toUpperCase()}</span>
+                        <span class="view-btn">CRIME DETAILS ▸</span>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            section.style.display = 'block';
+        }
+
+        function getStatusTag(status) {
+            switch (status) {
+                case 'wanted': return '<span class="tag tag-active">⚠ WANTED</span>';
+                case 'captured': return '<span class="tag tag-captured">✓ CAPTURED</span>';
+                case 'active': return '<span class="tag tag-wanted">◉ ACTIVE</span>';
+                default: return '';
+            }
+        }
+
+        function getCrimeTagClass(type) {
+            const dangerTypes = ['Murder', 'Terrorism', 'Arms Dealing'];
+            const warningTypes = ['Drug Trafficking', 'Human Trafficking', 'Kidnapping'];
+            if (dangerTypes.includes(type)) return 'tag-danger';
+            if (warningTypes.includes(type)) return 'tag-warning';
+            return 'tag-info';
+        }
+
+        // Show Detail Modal
+        function showDetail(criminal) {
+            const modal = document.getElementById('modalOverlay');
+            const body = document.getElementById('modalBody');
+            const threatClass = `threat-${criminal.threatLevel}`;
+            const threatBarClass = `threat-${criminal.threatLevel}-bar`;
+
+            body.innerHTML = `
+                <div class="detail-top">
+                    <div class="detail-photo-section">
+                        <div class="detail-photo">
+                            <img src="${criminal.photo}" alt="${criminal.name}">
+                        </div>
+                        <div class="fingerprint-section">
+                            <div class="label">Biometric ID</div>
+                            <div class="fingerprint-visual">🔐</div>
+                            <div style="font-family:'Share Tech Mono';font-size:0.6rem;color:rgba(0,240,255,0.3);margin-top:5px;">${criminal.id}</div>
+                        </div>
+                    </div>
+                    <div class="detail-info-section">
+                        <div class="criminal-name-large">${criminal.name}</div>
+                        <div class="criminal-alias">Alias: "${criminal.alias}"</div>
+                        <div class="criminal-case-id">Case ID: ${criminal.id} | NID: ${criminal.nid}</div>
+                        <div class="detail-tags">
+                            <span class="tag ${getCrimeTagClass(criminal.crimeType)}">${criminal.crimeType}</span>
+                            ${getStatusTag(criminal.status)}
+                            ${criminal.tags.map(t => `<span class="tag tag-info">${t}</span>`).join('')}
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="label">Age</div>
+                                <div class="value">${criminal.age} years</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Gender</div>
+                                <div class="value">${criminal.gender}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Blood Group</div>
+                                <div class="value">${criminal.bloodGroup}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Height / Weight</div>
+                                <div class="value">${criminal.height} / ${criminal.weight}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Division / District</div>
+                                <div class="value">${criminal.division} / ${criminal.district}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Complexion</div>
+                                <div class="value">${criminal.complexion}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Last Known Location</div>
+                                <div class="value">${criminal.lastKnownLocation}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="label">Bounty</div>
+                                <div class="value" style="color:var(--neon-yellow)">${criminal.bounty}</div>
+                            </div>
+                        </div>
+                        <div class="threat-bar">
+                            <div class="threat-bar-label">Threat Assessment Level: <span class="${threatClass}" style="font-weight:bold;">${criminal.threatLevel.toUpperCase()}</span></div>
+                            <div class="threat-bar-visual">
+                                <div class="threat-bar-fill ${threatBarClass}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Distinguishing Marks</div>
+                    <p class="bio-text">${criminal.distinguishingMarks}</p>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Intelligence Brief</div>
+                    <p class="bio-text">${criminal.bio}</p>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Criminal Records (${criminal.criminalRecords.length})</div>
+                    <ul class="criminal-record-list">
+                        ${criminal.criminalRecords.map(r => `
+                            <li>
+                                <div class="record-date">📅 ${r.date}</div>
+                                <div class="record-charge">${r.charge}</div>
+                                <div class="record-desc">${r.desc}</div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Known Associates (${criminal.associates.length})</div>
+                    <div class="associates-grid">
+                        ${criminal.associates.map(a => `
+                            <div class="associate-item">
+                                <div class="associate-avatar">👤</div>
+                                <div class="associate-name">${a.name}</div>
+                                <div class="associate-relation">${a.relation}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Case Summary</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="label">Active Warrants</div>
+                            <div class="value" style="color:var(--neon-red)">${criminal.warrants}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">Total Charges</div>
+                            <div class="value">${criminal.criminalRecords.length}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">Status</div>
+                            <div class="value">${criminal.status.toUpperCase()}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">Nationality</div>
+                            <div class="value">${criminal.nationality}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function quickSearch(term) {
+            document.getElementById('searchInput').value = term;
+            performSearch();
+        }
+
+        // ======================== EVENT LISTENERS ========================
+
+        document.getElementById('searchBtn').addEventListener('click', performSearch);
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+        document.getElementById('filterSelect').addEventListener('change', () => {
+            if (document.getElementById('searchInput').value || document.getElementById('filterSelect').value !== 'all') {
+                performSearch();
+            }
+        });
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ======================== INIT ========================
+        createParticles();
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        updateStats();
+    </script>
+</body>
+
+</html>
